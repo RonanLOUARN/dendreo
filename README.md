@@ -2,7 +2,6 @@
 
 Gem pour l'API du CRM dendreo.
 
-TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
@@ -23,14 +22,21 @@ Ou installez le gem vous-même:
 ## Démarrage rapide
 
 
-```ruby
+Instanciez votre API.
 
+```ruby
+  dendreo = Dendreo::API.new("https://pro.dendreo.com/masociété/api", "MaCleApi")
+```
+Attention à bien vérifier que votre url à bien ce format:
+
+```ruby
+ 'https://pro.dendreo.com/masociété/api'
 ```
 
-## Contributing
+## Contribution
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/RonanLOUARN/dendreo.
 
-## License
+## Licence
 
 Cette gem est opensource.
