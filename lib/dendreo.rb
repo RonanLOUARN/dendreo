@@ -1,81 +1,49 @@
 require "dendreo/version"
-require "restclient"
-
+require 'net/http'
 module Dendreo
   class API
     attr_accessor :url
     attr_accessor :api_key
+
     def initialize(url, api_key)
       @url = url #exemple = https://pro.dendreo.com/my_company/api
       @api_key = api_key
     end
 
     def method_missing(method_name, *args)
-      puts 'salope'
-      case args[:method]
-      when :get
-        args_formatted = format_args_to_url(args[:datas])
-        get("#{@url}/#{method_name}.php?#{@api_key}&#{args_formatted}")
-      when :post
-        post("#{@url}/#{method_name}.php?#{@api_key}", args[:datas])
+      method_name_string = method_name.to_s
+      request_method = args.first[:method]
+      datas = args.any? ? args.first[:datas] : {}
+      case request_method
+      when "get"
+        args_formatted = format_args_to_url(datas)
+        url = "#{@url}/#{method_name_string}.php?key=#{@api_key}#{args_formatted}"
+        puts url
+        get(url)
+      when "post"
+        post("#{@url}/#{method_name_string}.php?key=#{@api_key}", args.first[:datas])
       end
     end
-
-    def module_catgories_show(args = {})
-      args_formatted = format_args_to_url(args)
-      get("#{@url}/categories_module.php?#{@api_key}&#{args_formatted}")
-    end
-
 
     private
 
     def post( url, options = {})
-      RestClient::Request.execute(method: post,
-        url: url ,
-        payload: options
-      )
+      uri = URI(url)
+      result = Net::HTTP.post_form(uri, options)
+      res = result == "" ? "[{}]" : result.body
+      JSON.parse(res)
     end
 
     def get(url)
-      result = RestClient.get(url)
+      uri = URI(url)
+      result = Net::HTTP.get(uri)
       res = result == "" ? "[{}]" : result
       JSON.parse(res)
     end
 
     def format_args_to_url(args = {})
-      args.any? ? args.map{|k, v| "#{k}=#{v}" }.join("&") : ""
+      args.any? ? args.map{|k, v| k == args.keys.first ? "&#{k}=#{v}" : "#{k}=#{v}" }.join("&") : ""
     end
 
-
-
-
-    # def products_catgories_show(args = {})
-    #   args_formatted = format_args_to_url(args)
-    #   get("#{@url}/categories_produit.php?#{@api_key}&#{args_formatted}")
-    # end
-
-    # def modules_show(args = {})
-    #   args_formatted = format_args_to_url(args)
-    #   get("#{@url}/modules.php?#{@api_key}&#{args_formatted}")
-    # end
-
-    # def instructors_show(args = {})
-    #   args_formatted = format_args_to_url(args)
-    #   get("#{@url}/formateurs.php?#{@api_key}&#{args_formatted}")
-    # end
-
-    # def companies_show(args = {})
-    #   args_formatted = format_args_to_url(args)
-    #   get("#{@url}/entreprises.php?#{@api_key}&#{args_formatted}")
-    # end
-
-    # def companies_add(args = {})
-    #   post("#{@url}/entreprises.php?#{@api_key}", args)
-    # end
-
-    # def contacts_show(args = {})
-    #   args_formatted = format_args_to_url(args)
-    #   get("#{@url}/contacts.php?#{@api_key}&#{args_formatted}")
-    # end
   end
 end
