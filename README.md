@@ -81,7 +81,7 @@ Cet exemple fonctionne sur toutes les ressources sauf les "particuliers" que l'o
 
 ## Contribution
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/RonanLOUARN/dendreo.
+Rapports de bugs et contibutions ici => https://github.com/RonanLOUARN/dendreo.
 
 ## Licence
 
