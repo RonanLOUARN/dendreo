@@ -1,6 +1,6 @@
 # Dendreo
 
-Gem pour l'API du CRM dendreo.
+Gem pour l'API du CRM Dendreo.
 
 
 ## Installation
@@ -33,7 +33,7 @@ Attention à bien vérifier que votre url à bien ce format:
  'https://pro.dendreo.com/masociété/api'
 ```
 
-##Utilisation:
+## Utilisation:
 
 Je vous invite à bien lire la documentation de l'api ici => https://developers.dendreo.com/
 
@@ -41,23 +41,32 @@ La gem utilise la "method_missing", il vous suffira donc de récupérer le nom d
 
 Exemple:
 
-Il vous suffira de piocher le nom de la ressource tel qu'elle est dans l'url de la requête API.
+Il faut donc piocher le nom de la ressource tel quel est dans l'url de la requête API.
 
 Pour les participants ( GET https://pro.dendreo.com/demo/api/participants.php?)
 
 ```ruby
-  dendreo.participants(method: "get") # Renvoi tous les particpants
+  # Renvoi tous les particpants
+  dendreo.participants(method: "get")
 
-  dendreo.participants(method: "get", datas: {id_participant: 1345}) # Renvoi le particpants qui a l'id en question
+  # Renvoi le particpant qui a l'id en question
+  dendreo.participants(method: "get", datas: {id_participant: 1345})
 
+  # Renvoi le ou les particpants qui ont l'email en question
   dendreo.participants(method: "get", datas: {email: "mon_email@gmail.com"})
 
+  #Renvoi le ou les particpants qui ont le commentaire en question
   dendreo.participants(method: "get", datas: {search: "Un joli nom ou ce que vous souhaitez id, email, commentaires etc.."})
 ```
 
 Ajouter ou modifier un participant.
 
-Attention, pour modifier un participant déjà existant, il vous suffit de remplacer "id_participant" par "id" tout court et d'ajouter un "id_add" qui contiendra un id d'administrateur. Je porte votre attention sur le fait que si vous modifiez un utilisateur il faudra re-rentrer la totalité des données, même si elles étaient déjà existantes auparavant, sinon il ne les gardera pas. L'API est faite comme cela, je n'y peut rien. Ceci n'est pas encore spécifié dans la documentation. Faites appel au support dendreo pour plus d'informations, ils sont très réactifs equipe@dendreo.com .
+Attention, pour modifier un participant déjà existant, il vous suffit de remplacer "id_participant" par "id" tout court et d'ajouter un "id_add" qui contiendra un id d'administrateur.
+
+Je porte votre attention sur le fait que si vous modifiez un utilisateur il faudra re-rentrer la totalité des données, même si elles étaient déjà existantes auparavant, sinon il ne les gardera pas. Vous pouvez donc utiliser la méthode get avec l'id en question pour récupérer les informations avant de faire vôtre modification.
+
+L'API est faite comme cela, je n'y peut rien. Ceci n'est pas encore spécifié dans la documentation.
+Faites appel au support dendreo pour plus d'informations, ils sont très réactifs equipe@dendreo.com .
 
 ```ruby
   # Créer un participant
