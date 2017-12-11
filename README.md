@@ -5,7 +5,7 @@ Gem pour l'API du CRM Dendreo.
 
 ## Installation
 
-Ajoutez cette à votre Gemfile:
+Ajoutez cette ligne à votre Gemfile:
 
 ```ruby
 gem 'dendreo'
@@ -15,7 +15,7 @@ Bien entendu:
 
     $ bundle
 
-Ou installez le gem vous-même:
+Ou installez la gem vous-même:
 
     $ gem install dendreo
 

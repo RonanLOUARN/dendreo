@@ -37,31 +37,6 @@ module Dendreo
       response_json(RestClient::Request.execute(hsh))
     end
 
-    # def post( url, options = {})
-    #   result = RestClient::Request.execute(
-    #     url: url,
-    #     method: :post,
-    #     payload: options
-    #   )
-    #   response_json(result)
-    # end
-
-    # def get(url)
-    #   result = RestClient::Request.execute(
-    #     url: url,
-    #     method: :get
-    #   )
-    #   response_json(result)
-    # end
-
-    # def delete(url)
-    #   result = RestClient::Request.execute(
-    #     url: url,
-    #     method: :delete
-    #   )
-    #   response_json(result)
-    # end
-
     def format_args_to_url(args = {})
       args.any? ? args.map{|k, v| k == args.keys.first ? "&#{k}=#{v}" : "#{k}=#{v}" }.join("&") : ""
     end
