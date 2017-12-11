@@ -22,6 +22,10 @@ module Dendreo
         get(url)
       when "post"
         post(base_url, args.first[:datas])
+      when "delete"
+        args_formatted = format_args_to_url(datas)
+        url = "#{base_url}#{args_formatted}"
+        delete(url)
       else
         raise "Méthode inconnue '#{request_method}' !"
       end
@@ -39,6 +43,13 @@ module Dendreo
     def get(url)
       uri = URI(url)
       result = Net::HTTP.get(uri)
+      res = result == "" ? "[{}]" : result
+      JSON.parse(res)
+    end
+
+    def delete(url, options = {})
+      uri = URI(url)
+      result = Net::HTTP.delete(uri)
       res = result == "" ? "[{}]" : result
       JSON.parse(res)
     end
