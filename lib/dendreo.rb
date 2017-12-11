@@ -1,4 +1,5 @@
 require "dendreo/version"
+require "json"
 require 'net/http'
 module Dendreo
   class API
