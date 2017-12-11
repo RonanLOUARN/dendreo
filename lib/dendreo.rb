@@ -1,6 +1,7 @@
 require "dendreo/version"
 require "json"
 require 'net/http'
+require "rest-client"
 module Dendreo
   class API
     attr_accessor :url
@@ -18,15 +19,11 @@ module Dendreo
       base_url = "#{@url}/#{method_name_string}.php?key=#{@api_key}"
       case request_method
       when "get"
-        args_formatted = format_args_to_url(datas)
-        url = "#{base_url}#{args_formatted}"
-        get(url)
+        send_it(:get, "#{base_url}#{format_args_to_url(datas)}")
       when "post"
-        post(base_url, args.first[:datas])
+        send_it(:post, "#{base_url}", datas)
       when "delete"
-        args_formatted = format_args_to_url(datas)
-        url = "#{base_url}"
-        delete(url, args_formatted)
+        send_it(:delete, "#{base_url}#{format_args_to_url(datas)}")
       else
         raise "Méthode inconnue '#{request_method}' !"
       end
@@ -34,30 +31,43 @@ module Dendreo
 
     private
 
-    def post( url, options = {})
-      uri = URI(url)
-      result = Net::HTTP.post_form(uri, options)
-      res = result == "" ? "[{}]" : result.body
-      JSON.parse(res)
+    def send_it(http_method, url, options = {})
+      hsh = {url: url, method: http_method }
+      hsh.merge!(payload: options) if http_method == :post
+      response_json(RestClient::Request.execute(hsh))
     end
 
-    def get(url)
-      uri = URI(url)
-      result = Net::HTTP.get(uri)
-      res = result == "" ? "[{}]" : result
-      JSON.parse(res)
-    end
+    # def post( url, options = {})
+    #   result = RestClient::Request.execute(
+    #     url: url,
+    #     method: :post,
+    #     payload: options
+    #   )
+    #   response_json(result)
+    # end
 
-    def delete(url, path)
-      uri = URI(url)
-      result = Net::HTTP.new(url, nil).delete(path)
-      res = result == "" ? "[{}]" : result
-      JSON.parse(res)
-    end
+    # def get(url)
+    #   result = RestClient::Request.execute(
+    #     url: url,
+    #     method: :get
+    #   )
+    #   response_json(result)
+    # end
+
+    # def delete(url)
+    #   result = RestClient::Request.execute(
+    #     url: url,
+    #     method: :delete
+    #   )
+    #   response_json(result)
+    # end
 
     def format_args_to_url(args = {})
       args.any? ? args.map{|k, v| k == args.keys.first ? "&#{k}=#{v}" : "#{k}=#{v}" }.join("&") : ""
     end
 
+    def response_json(result)
+      JSON.parse(result == "" ? "[{}]" : result)
+    end
   end
 end
