@@ -14,14 +14,16 @@ module Dendreo
       method_name_string = method_name.to_s
       request_method = args.first[:method]
       datas = args.any? ? args.first[:datas] : {}
+      base_url = "#{@url}/#{method_name_string}.php?key=#{@api_key}"
       case request_method
       when "get"
         args_formatted = format_args_to_url(datas)
-        url = "#{@url}/#{method_name_string}.php?key=#{@api_key}#{args_formatted}"
-        puts url
+        url = "#{base_url}#{args_formatted}"
         get(url)
       when "post"
-        post("#{@url}/#{method_name_string}.php?key=#{@api_key}", args.first[:datas])
+        post(base_url, args.first[:datas])
+      else
+        raise "Méthode inconnue '#{request_method}' !"
       end
     end
 
