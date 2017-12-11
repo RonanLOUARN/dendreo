@@ -50,7 +50,7 @@ module Dendreo
 
     def delete(url, path)
       uri = URI(url)
-      result = Net::HTTP.new(url).delete(path)
+      result = Net::HTTP.new(url, nil).delete(path)
       res = result == "" ? "[{}]" : result
       JSON.parse(res)
     end
