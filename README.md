@@ -82,9 +82,6 @@ Ajouter ou modifier un participant.
 
 Attention, pour modifier un participant déjà existant, il vous suffit de remplacer "id_participant" par "id" tout court et d'ajouter un "id_add" qui contiendra un id d'administrateur.
 
-Je porte votre attention sur le fait que si vous modifiez un utilisateur il faudra re-rentrer la totalité des données, même si elles étaient déjà existantes auparavant, sinon il ne les gardera pas. Vous pouvez donc utiliser la méthode get avec l'id en question pour récupérer les informations avant de faire vôtre modification.
-
-L'API est faite comme cela. Ceci n'est pas encore spécifié dans la documentation.
 Faites appel au support dendreo pour plus d'informations, ils sont très réactifs equipe@dendreo.com .
 
 ```ruby
