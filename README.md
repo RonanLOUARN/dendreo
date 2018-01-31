@@ -8,7 +8,7 @@ Gem pour l'API du CRM Dendreo.
 Ajoutez cette ligne à votre Gemfile:
 
 ```ruby
-gem 'dendreo'
+gem 'Dendreo'
 ```
 
 Bien entendu:

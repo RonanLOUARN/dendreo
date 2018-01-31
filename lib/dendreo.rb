@@ -19,7 +19,7 @@ module Dendreo
       base_url = "#{@url}/#{method_name_string}.php?key=#{@api_key}"
       case request_method
       when "get"
-        send_it(:get, "#{base_url}#{format_args_to_url(datas)}")
+        send_it(:get, "#{base_url}#{format_args_to_url(datas || {})}")
       when "post"
         send_it(:post, "#{base_url}", datas)
       when "delete"
