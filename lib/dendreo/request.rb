@@ -58,7 +58,7 @@ module Dendreo
 
       errors << Requests::Error.new(
         'La data est vide sur une requête :post'
-      ) if http_method == :post && args[:data]&.empty?
+      ) if http_method == :post && args[:form_data].empty?
     end
   end
 end
