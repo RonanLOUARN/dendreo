@@ -10,7 +10,6 @@ module Dendreo
         @url_data = url_data
         @url = url
         @api_key = api_key
-        puts build_complete_url
         @complete_url = build_complete_url
       end
 
@@ -27,7 +26,6 @@ module Dendreo
 
         build_data_url
       end
-
 
       def build_complete_url
         "#{@url}/#{@endpoint}.php?key=#{@api_key}&#{build_url}"
