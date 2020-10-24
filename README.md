@@ -121,7 +121,7 @@ Faites appel au support dendreo pour plus d'informations, ils sont très réacti
   # s'identifier en admin sur la mise à jour.)
   dendreo.participants(method: 'post', url_data: { id_participant: 1345 }, form_data: { nom: 'nouveau nom', civilite: 'M.', id_add: 2 })
 
-  # Supprimer un participant (attention, il n'y a pas de methode 'delete' sûr tous les endpoints)
+  # Supprimer un participant (attention, il n'y a pas de methode 'delete' sur tous les endpoints)
   dendreo.participants(method: 'delete', url_data: { id_participant: 1345 })
 
 ```
