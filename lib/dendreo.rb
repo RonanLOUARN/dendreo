@@ -1,48 +1,55 @@
-require "dendreo/version"
-require "json"
-require 'net/http'
-require "rest-client"
+# frozen_string_literal: true
+
+require 'byebug'
+require 'dendreo/version'
+require 'dendreo/requests/error'
+require 'dendreo/requests/url'
+require 'dendreo/request'
+require 'json'
+require 'rest-client'
+
 module Dendreo
   class API
-    attr_accessor :url
-    attr_accessor :api_key
+    attr_accessor :url, :api_key, :errors, :result
 
     def initialize(url, api_key)
-      @url = url #exemple = https://pro.dendreo.com/my_company/api
+      @url = url # https://pro.dendreo.com/my_company/api
       @api_key = api_key
+      @request = Request.new(base_url: @url, api_key: @api_key)
+      @errors = @request.errors
+      @result = nil
+      handle_errors
     end
 
     def method_missing(method_name, *args)
-      method_name_string = method_name.to_s
-      request_method = args.first[:method]
-      datas = args.any? ? args.first[:datas] : {}
-      base_url = "#{@url}/#{method_name_string}.php?key=#{@api_key}"
-      case request_method
-      when "get"
-        send_it(:get, "#{base_url}#{format_args_to_url(datas || {})}")
-      when "post"
-        send_it(:post, "#{base_url}", datas)
-      when "delete"
-        send_it(:delete, "#{base_url}#{format_args_to_url(datas)}")
-      else
-        raise "Méthode inconnue '#{request_method}' !"
-      end
+      @errors = []
+      @result = @request.call(
+        http_method: args.first[:method],
+        endpoint: method_name,
+        args: args.first,
+      )
+      handle_errors
+      @result
     end
 
     private
 
-    def send_it(http_method, url, options = {})
-      hsh = {url: url, method: http_method }
-      hsh.merge!(payload: options) if http_method == :post
-      response_json(RestClient::Request.execute(hsh))
+    def handle_errors
+      handle_init_errors
+      @errors += @request.errors
+      return if @errors.empty?
+
+      raise Requests::Error.new(@errors.map(&:message).join(', '))
     end
 
-    def format_args_to_url(args = {})
-      args.any? ? args.map{|k, v| k == args.keys.first ? "&#{k}=#{v}" : "#{k}=#{v}" }.join("&") : ""
-    end
+    def handle_init_errors
+      errors << Requests::Error.new(
+        'Veuillez renseigner une url ex: https://pro.dendreo.com/my_company/api'
+      ) if @url.nil? or @url == ''
 
-    def response_json(result)
-      JSON.parse(result == "" ? "[{}]" : result)
+      errors << Requests::Error.new(
+        'Veuillez renseigner une clé API'
+      ) if @api_key.nil? or @api_key == ''
     end
   end
 end
