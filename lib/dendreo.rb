@@ -24,7 +24,7 @@ module Dendreo
     def method_missing(method_name, *args)
       @errors = []
       @result = @request.call(
-        http_method: args.first[:method],
+        http_method: args.first&.dig(:method),
         endpoint: method_name,
         args: args.first,
       )
@@ -39,7 +39,7 @@ module Dendreo
       @errors += @request.errors
       return if @errors.empty?
 
-      raise Requests::Error.new(@errors.map(&:message).join(', '))
+      raise Requests::Error.new(@errors.map(&:message).uniq.join(', '))
     end
 
     def handle_init_errors
